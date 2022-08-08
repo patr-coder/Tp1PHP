@@ -10,12 +10,14 @@ dirname(__DIR__ ). DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . 'fun
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.1/assets/img/favicons/favicon.ico">
 
-    <title><?php if(isset($title)):?>
-            <?= $title; ?>
+    <title><?=$title ?? 'Mon site'?>
+      
+    </title>
+    <!-- <?php if(isset($title)):?>
+      <?= $title; ?>
             <?php else : ?>
                 My web application
-             <?php endif;?>   
-    </title>
+             <?php endif;?>    -->
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/starter-template/">
 

@@ -1,4 +1,5 @@
 <?php 
+require_once 'GuestBook.php';
 class message{
     const LIMIT_USERNAME = 3;
     const LIMIT_MESSAGE = 10;
@@ -6,8 +7,12 @@ class message{
     private $message;
     private $date ;
 
-
-    public function  __construct(string $username, string $message , ?DateTime $date = null) 
+    public static function fromJSON(string $json): Message
+    {
+        $data = json_decode($json, true);
+        return new self($data['username'], $data['message'], new DateTime("@". $data['date']));
+    }
+    public function  __construct(string $username, string $message, ? DateTime $date = null) 
     {
         $this -> username = $username;
         $this -> message = $message;
@@ -38,13 +43,27 @@ class message{
         }
         return $error;
     }
+    public function toHTML():string
+    {
+        $username = htmlentities($this->username);
+        $this->date->setTimezone(new DateTimeZone('Asia/Tokyo'));
+        $date = $this->date->format('Y-m-d a H:i');
+        $message = nl2br(htmlentities($this->message));
+
+        return <<<HTML
+    <p>
+        <strong>{$username}</strong> <em>le {$date}</em><br>
+        {$message}
+    </p>
+HTML;        
+    }
     public function toJSON() : string
     {
         
             return json_encode([
             'username' => $this-> username,
             'message' => $this->message,
-            'date' => $this->getTimestamp()
+            'date' => $this->date->getTimestamp()
             ]);
 
 
